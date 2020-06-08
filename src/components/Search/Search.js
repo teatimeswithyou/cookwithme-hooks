@@ -1,55 +1,37 @@
-import React from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import debounce from "lodash.debounce";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import debounce from 'lodash.debounce';
 
-import { getRecipesRequest } from "../../store/actions/recipesActions";
-import { Container, Input, Icon } from "./Search-styles";
+import { getRecipesRequest } from '../../store/actions/recipesActions';
+import { Container, Input, Icon } from './Search-styles';
+import { useHistory } from 'react-router-dom';
 
-class Search extends React.Component {
-  state = {
-    inputValue: "",
-  };
+export const Search = () => {
+  const [inputValue, setInputValue] = useState('');
 
-  handleChange = ({ target: { value } }) => {
-    this.setState({ inputValue: value });
-    this.debounceClick();
-  };
+  let history = useHistory();
 
-  handleClick = () => {
-    const { inputValue } = this.state;
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
     if (inputValue) {
-      this.props.getRecipesRequest(inputValue);
-      this.setState({ inputValue: "" });
-      this.props.history.push("/");
+      dispatch(getRecipesRequest(inputValue));
+      setInputValue('');
+      history.push('/');
     }
   };
 
-  debounceClick = debounce(this.handleClick, 350);
-
-  handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      this.handleClick();
-    }
+  const handleChange = ({ target: { value } }) => {
+    setInputValue(value);
+    debounceClick();
   };
 
-  render() {
-    return (
-      <Container>
-        <Icon onClick={this.handleClick} />
-        <Input placeholder="Search…" onChange={this.handleChange} />
-      </Container>
-    );
-  }
-}
+  const debounceClick = debounce(handleClick, 350);
 
-const mapStateToProps = (state) => {
-  return {
-    recipes: state.recipes,
-  };
+  return (
+    <Container>
+      <Icon onClick={handleClick} />
+      <Input placeholder="Search…" onChange={handleChange} />
+    </Container>
+  );
 };
-
-export default connect(mapStateToProps, { getRecipesRequest })(
-  withRouter(Search)
-);
