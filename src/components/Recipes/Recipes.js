@@ -1,53 +1,47 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { getRecipesLoadMoreRequest } from "../../store/actions/recipesActions";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import Loader from "../Loader/Loader";
-import List from "../List/List";
+import { getRecipesLoadMoreRequest } from '../../store/actions/recipesActions';
+import { SnackbarContent } from '@material-ui/core';
+import { Loader } from '../Loader/Loader';
+import { List } from '../List/List';
 
-class Recipes extends React.Component {
-  render() {
-    const {
-      items: recipes,
-      totalResults,
-      isLoading,
-      currentSearch,
-      baseUri,
-    } = this.props.recipes;
+export const Recipes = () => {
+  const {
+    items: recipes,
+    totalResults,
+    isLoading,
+    currentSearch,
+    baseUri,
+  } = useSelector((state) => state.recipes);
 
-    const loadMoreItems = async () =>
-      await this.props.getRecipesLoadMoreRequest({
+  const dispatch = useDispatch();
+
+  const loadMoreItems = async () =>
+    await dispatch(
+      getRecipesLoadMoreRequest({
         value: currentSearch,
         offset: recipes.length,
-      });
-
-    const hasMoreItems = totalResults - recipes.length > 0;
-
-    if (!recipes.length && isLoading) {
-      return <Loader />;
-    }
-
-    if (!recipes.length) {
-      return <SnackbarContent message="Start to search something" />;
-    }
-
-    return (
-      <List
-        hasNextPage={hasMoreItems}
-        isNextPageLoading={isLoading}
-        items={recipes}
-        loadNextPage={loadMoreItems}
-        baseUri={baseUri}
-      />
+      })
     );
+
+  const hasMoreItems = totalResults - recipes.length > 0;
+
+  if (!recipes.length && isLoading) {
+    return <Loader />;
   }
-}
 
-const mapStateToProps = (state) => {
-  return {
-    recipes: state.recipes,
-  };
+  if (!recipes.length) {
+    return <SnackbarContent message="Start to search something" />;
+  }
+
+  return (
+    <List
+      hasNextPage={hasMoreItems}
+      isNextPageLoading={isLoading}
+      items={recipes}
+      loadNextPage={loadMoreItems}
+      baseUri={baseUri}
+    />
+  );
 };
-
-export default connect(mapStateToProps, { getRecipesLoadMoreRequest })(Recipes);
