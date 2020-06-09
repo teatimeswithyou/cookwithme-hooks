@@ -13,12 +13,11 @@ export const Recipe = () => {
 
   const dispatch = useDispatch();
 
-  let history = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    const { id } = history;
     dispatch(getRecipeRequest(id));
-  });
+  }, [dispatch, id]);
 
   const removeTags = (text) => {
     if (text) {
