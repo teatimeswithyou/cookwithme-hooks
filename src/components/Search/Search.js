@@ -9,29 +9,43 @@ import { useHistory } from 'react-router-dom';
 export const Search = () => {
   const [inputValue, setInputValue] = useState('');
 
-  let history = useHistory();
+  const { push, location } = useHistory();
 
   const dispatch = useDispatch();
 
-  const handleClick = () => {
+  const getRecipes = debounce(() => {
     if (inputValue) {
       dispatch(getRecipesRequest(inputValue));
       setInputValue('');
-      history.push('/');
+      push('/');
+    }
+  }, 350);
+
+  const handleSearchChange = debounce(({ target: { value } }) => {
+    setInputValue(value);
+
+    if (location.pathname === '/') {
+      dispatch(getRecipesRequest(inputValue));
+    }
+  }, 350);
+
+  const handleEnter = ({ key }) => {
+    if (key === 'Enter') {
+      getRecipes();
     }
   };
 
-  const handleChange = ({ target: { value } }) => {
-    setInputValue(value);
-    debounceClick();
-  };
-
-  const debounceClick = debounce(handleClick, 350);
-
   return (
     <Container>
-      <Icon onClick={handleClick} />
-      <Input placeholder="Search…" onChange={handleChange} />
+      <Icon onClick={getRecipes} />
+      <Input
+        placeholder="Search…"
+        onChange={(e) => {
+          e.persist();
+          handleSearchChange(e);
+        }}
+        onKeyPress={handleEnter}
+      />
     </Container>
   );
 };
