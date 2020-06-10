@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 import { Recipes } from '../../components/Recipes/Recipes';
-import { Container } from '../../components/Layout/Layout-styles';
+import { Layout } from '../../components/Layout/Layout';
 
 export const Main = () => (
   <>
@@ -11,9 +11,9 @@ export const Main = () => (
       <title>Home</title>
     </Helmet>
     <main>
-      <Container>
+      <Layout>
         <Recipes />
-      </Container>
+      </Layout>
     </main>
   </>
 );

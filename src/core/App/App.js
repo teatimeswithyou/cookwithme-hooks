@@ -6,8 +6,6 @@ import { Detail } from '../../screens/Detail/Detail';
 import { AboutPage } from '../../screens/AboutPage/AboutPage';
 import { Header } from '../../components/Header/Header';
 
-import './App.css';
-
 export const App = () => (
   <>
     <Header />

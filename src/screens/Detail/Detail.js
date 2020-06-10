@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 import { Recipe } from '../../components/Recipe/Recipe';
-import { Container } from '../../components/Layout/Layout-styles';
+import { Layout } from '../../components/Layout/Layout';
 
 export const Detail = () => (
   <>
@@ -10,8 +10,8 @@ export const Detail = () => (
       <meta charSet="utf-8" />
       <title>Recipe Detail</title>
     </Helmet>
-    <Container>
+    <Layout>
       <Recipe />
-    </Container>
+    </Layout>
   </>
 );
