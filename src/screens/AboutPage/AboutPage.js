@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 import { About } from '../../components/About/About';
-import { Container } from '../../components/Layout/Layout-styles';
+import { Layout } from '../../components/Layout/Layout';
 
 export const AboutPage = () => (
   <>
@@ -10,8 +10,8 @@ export const AboutPage = () => (
       <meta charSet="utf-8" />
       <title>About Us</title>
     </Helmet>
-    <Container>
+    <Layout>
       <About />
-    </Container>
+    </Layout>
   </>
 );
